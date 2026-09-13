@@ -134,12 +134,21 @@ private:
     double Pulse1LastTime;
     double Pulse2LastTime;
 
-    unsigned long LAPPDDataTimeStampUL;
-    unsigned long LAPPDDataBeamgateUL;
-    unsigned long LAPPDDataTimestampPart1;
-    unsigned long LAPPDDataBeamgatePart1;
-    double LAPPDDataTimestampPart2;
-    double LAPPDDataBeamgatePart2;
+    // ACDC 0
+    unsigned long LAPPDDataTimeStamp0_UL;
+    unsigned long LAPPDDataBeamgate0_UL;
+    unsigned long LAPPDDataTimestamp0_Part1;
+    unsigned long LAPPDDataBeamgate0_Part1;
+    double LAPPDDataTimestamp0_Part2;
+    double LAPPDDataBeamgate0_Part2;
+
+    // ACDC 1
+    unsigned long LAPPDDataTimeStamp1_UL;
+    unsigned long LAPPDDataBeamgate1_UL;
+    unsigned long LAPPDDataTimestamp1_Part1;
+    unsigned long LAPPDDataBeamgate1_Part1;
+    double LAPPDDataTimestamp1_Part2;
+    double LAPPDDataBeamgate1_Part2;
 
     vector<unsigned long> pps_vector;
     vector<unsigned long> pps_count_vector;
