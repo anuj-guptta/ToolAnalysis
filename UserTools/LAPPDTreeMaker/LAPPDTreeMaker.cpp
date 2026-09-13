@@ -58,8 +58,8 @@ bool LAPPDTreeMaker::Initialise(std::string configfile, DataModel &data)
   fPulse->Branch("PartFileNumber", &PartFileNumber, "PartFileNumber/I");
   fPulse->Branch("EventNumber", &EventNumber, "EventNumber/I");
   fPulse->Branch("LAPPD_ID", &LAPPD_ID, "LAPPD_ID/I");
-  fPulse->Branch("LAPPDDataTimeStampUL", &LAPPDDataTimeStampUL, "LAPPDDataTimeStampUL/l");
-  fPulse->Branch("LAPPDDataBeamgateUL", &LAPPDDataBeamgateUL, "LAPPDDataBeamgateUL/l");
+  fPulse->Branch("LAPPDDataTimeStamp0_UL", &LAPPDDataTimeStamp0_UL, "LAPPDDataTimeStamp0_UL/l");
+  fPulse->Branch("LAPPDDataBeamgate0_UL", &LAPPDDataBeamgate0_UL, "LAPPDDataBeamgate0_UL/l");
   fPulse->Branch("ChannelID", &ChannelID, "ChannelID/I");
   fPulse->Branch("StripNumber", &StripNumber, "StripNumber/I");
   fPulse->Branch("PeakTime", &PeakTime, "PeakTime/D");
@@ -87,8 +87,8 @@ bool LAPPDTreeMaker::Initialise(std::string configfile, DataModel &data)
   fHit->Branch("PartFileNumber", &PartFileNumber, "PartFileNumber/I");
   fHit->Branch("EventNumber", &EventNumber, "EventNumber/I");
   fHit->Branch("LAPPD_ID", &LAPPD_ID, "LAPPD_ID/I");
-  fHit->Branch("LAPPDDataTimeStampUL", &LAPPDDataTimeStampUL, "LAPPDDataTimeStampUL/l");
-  fHit->Branch("LAPPDDataBeamgateUL", &LAPPDDataBeamgateUL, "LAPPDDataBeamgateUL/l");
+  fHit->Branch("LAPPDDataTimeStamp0_UL", &LAPPDDataTimeStamp0_UL, "LAPPDDataTimeStamp0_UL/l");
+  fHit->Branch("LAPPDDataBeamgate0_UL", &LAPPDDataBeamgate0_UL, "LAPPDDataBeamgate0_UL/l");
   fHit->Branch("StripNumber", &StripNumber, "StripNumber/I");
   fHit->Branch("HitTime", &HitTime, "HitTime/D");
   fHit->Branch("HitAmp", &HitAmp, "HitAmp/D");
@@ -117,8 +117,8 @@ bool LAPPDTreeMaker::Initialise(std::string configfile, DataModel &data)
   fWaveform->Branch("PartFileNumber", &PartFileNumber, "PartFileNumber/I");
   fWaveform->Branch("EventNumber", &EventNumber, "EventNumber/I");
   fWaveform->Branch("LAPPD_ID", &LAPPD_ID, "LAPPD_ID/I");
-  fWaveform->Branch("LAPPDDataTimeStampUL", &LAPPDDataTimeStampUL, "LAPPDDataTimeStampUL/l");
-  fWaveform->Branch("LAPPDDataBeamgateUL", &LAPPDDataBeamgateUL, "LAPPDDataBeamgateUL/l");
+  fWaveform->Branch("LAPPDDataTimeStamp0_UL", &LAPPDDataTimeStamp0_UL, "LAPPDDataTimeStamp0_UL/l");
+  fWaveform->Branch("LAPPDDataBeamgate0_UL", &LAPPDDataBeamgate0_UL, "LAPPDDataBeamgate0_UL/l");
   fWaveform->Branch("StripNumber", &StripNumber, "StripNumber/I");
   fWaveform->Branch("PulseSide", &PulseSide, "PulseSide/I");
   fWaveform->Branch("WaveformMax", &waveformMaxValue, "WaveformMax/D");
@@ -142,12 +142,18 @@ bool LAPPDTreeMaker::Initialise(std::string configfile, DataModel &data)
   fTimeStamp->Branch("PartFileNumber", &PartFileNumber, "PartFileNumber/I");
   fTimeStamp->Branch("EventNumber", &EventNumber, "EventNumber/I");
   fTimeStamp->Branch("LAPPD_ID", &LAPPD_ID, "LAPPD_ID/I");
-  fTimeStamp->Branch("LAPPDDataTimeStampUL", &LAPPDDataTimeStampUL, "LAPPDDataTimeStampUL/l");
-  fTimeStamp->Branch("LAPPDDataBeamgateUL", &LAPPDDataBeamgateUL, "LAPPDDataBeamgateUL/l");
-  fTimeStamp->Branch("LAPPDDataTimestamp", &LAPPDDataTimestampPart1, "LAPPDDataTimestamp/l");
-  fTimeStamp->Branch("LAPPDDataBeamgate", &LAPPDDataBeamgatePart1, "LAPPDDataBeamgate/l");
-  fTimeStamp->Branch("LAPPDDataTimestampFloat", &LAPPDDataTimestampPart2, "LAPPDDataTimestampFloat/D");
-  fTimeStamp->Branch("LAPPDDataBeamgateFloat", &LAPPDDataBeamgatePart2, "LAPPDDataBeamgateFloat/D");
+  fTimeStamp->Branch("LAPPDDataTimeStamp0_UL", &LAPPDDataTimeStamp0_UL, "LAPPDDataTimeStamp0_UL/l");
+  fTimeStamp->Branch("LAPPDDataBeamgate0_UL", &LAPPDDataBeamgate0_UL, "LAPPDDataBeamgate0_UL/l");
+  fTimeStamp->Branch("LAPPDDataTimestamp0", &LAPPDDataTimestamp0_Part1, "LAPPDDataTimestamp0/l");
+  fTimeStamp->Branch("LAPPDDataBeamgate0", &LAPPDDataBeamgate0_Part1, "LAPPDDataBeamgate0/l");
+  fTimeStamp->Branch("LAPPDDataTimestamp0_Float", &LAPPDDataTimestamp0_Part2, "LAPPDDataTimestamp0_Float/D");
+  fTimeStamp->Branch("LAPPDDataBeamgate0_Float", &LAPPDDataBeamgate0_Part2, "LAPPDDataBeamgate0_Float/D");
+  fTimeStamp->Branch("LAPPDDataTimeStamp1_UL", &LAPPDDataTimeStamp1_UL, "LAPPDDataTimeStamp1_UL/l");
+  fTimeStamp->Branch("LAPPDDataBeamgate1_UL", &LAPPDDataBeamgate1_UL, "LAPPDDataBeamgate1_UL/l");
+  fTimeStamp->Branch("LAPPDDataTimestamp1", &LAPPDDataTimestamp1_Part1, "LAPPDDataTimestamp1/l");
+  fTimeStamp->Branch("LAPPDDataBeamgate1", &LAPPDDataBeamgate1_Part1, "LAPPDDataBeamgate1/l");
+  fTimeStamp->Branch("LAPPDDataTimestamp1_Float", &LAPPDDataTimestamp1_Part2, "LAPPDDataTimestamp1_Float/D");
+  fTimeStamp->Branch("LAPPDDataBeamgate1_Float", &LAPPDDataBeamgate1_Part2, "LAPPDDataBeamgate1_Float/D");
   fTimeStamp->Branch("ppsDiff", &ppsDiff, "ppsDiff/L");
   fTimeStamp->Branch("ppsCount0", &ppsCount0, "ppsCount0/l");
   fTimeStamp->Branch("ppsCount1", &ppsCount1, "ppsCount1/l");
@@ -418,12 +424,21 @@ void LAPPDTreeMaker::CleanVariables()
   Pulse1LastTime = -9999;
   Pulse2LastTime = -9999;
 
-  LAPPDDataTimeStampUL = 0;
-  LAPPDDataBeamgateUL = 0;
-  LAPPDDataTimestampPart1 = 0;
-  LAPPDDataBeamgatePart1 = 0;
-  LAPPDDataTimestampPart2 = -9999;
-  LAPPDDataBeamgatePart2 = -9999;
+  // ACDC 0
+  LAPPDDataTimeStamp0_UL = 0;
+  LAPPDDataBeamgate0_UL = 0;
+  LAPPDDataTimestamp0_Part1 = 0;
+  LAPPDDataBeamgate0_Part1 = 0;
+  LAPPDDataTimestamp0_Part2 = -9999;
+  LAPPDDataBeamgate0_Part2 = -9999;
+
+  // ACDC 1
+  LAPPDDataTimeStamp1_UL = 0;
+  LAPPDDataBeamgate1_UL = 0;
+  LAPPDDataTimestamp1_Part1 = 0;
+  LAPPDDataBeamgate1_Part1 = 0;
+  LAPPDDataTimestamp1_Part2 = -9999;
+  LAPPDDataBeamgate1_Part2 = -9999;
 
   ppsDiff = -9999;
   ppsCount0 = 0;
@@ -755,16 +770,45 @@ bool LAPPDTreeMaker::FillPPSTimestamp()
 
 bool LAPPDTreeMaker::FillLAPPDDataTimeStamp()
 {
-  if (treeMakerVerbosity > 0)
-    cout << "LAPPDTreeMaker::FillLAPPDDataTimeStamp. Before fill: LAPPDDataTimeStampUL: " << LAPPDDataTimeStampUL << ", LAPPDDataBeamgateUL: " << LAPPDDataBeamgateUL << ", LAPPDDataTimestampPart1: " << LAPPDDataTimestampPart1 << ", LAPPDDataBeamgatePart1: " << LAPPDDataBeamgatePart1 << ", LAPPDDataTimestampPart2: " << LAPPDDataTimestampPart2 << ", LAPPDDataBeamgatePart2: " << LAPPDDataBeamgatePart2 << endl;
+  if (treeMakerVerbosity > 0) {
+    std::cout << "LAPPDTreeMaker::FillLAPPDDataTimeStamp, before fill:"
+          << "\n  ACDC 0:"
+          << "\n    Timestamp UL   = " << LAPPDDataTimeStamp0_UL
+          << "\n    Beamgate UL    = " << LAPPDDataBeamgate0_UL
+          << "\n    Timestamp Part1 = " << LAPPDDataTimestamp0_Part1
+          << "\n    Beamgate Part1  = " << LAPPDDataBeamgate0_Part1
+          << "\n    Timestamp Part2 = " << LAPPDDataTimestamp0_Part2
+          << "\n    Beamgate Part2  = " << LAPPDDataBeamgate0_Part2
+          << "\n  ACDC 1:"
+          << "\n    Timestamp UL   = " << LAPPDDataTimeStamp1_UL
+          << "\n    Beamgate UL    = " << LAPPDDataBeamgate1_UL
+          << "\n    Timestamp Part1 = " << LAPPDDataTimestamp1_Part1
+          << "\n    Beamgate Part1  = " << LAPPDDataBeamgate1_Part1
+          << "\n    Timestamp Part2 = " << LAPPDDataTimestamp1_Part2
+          << "\n    Beamgate Part2  = " << LAPPDDataBeamgate1_Part2
+          << "\n  LAPPD ID = " << LAPPD_ID
+          << std::endl;
+  }
+
   if (!MultiLAPPDMapTreeMaker)
   {
-    m_data->CStore.Get("LAPPDBeamgate_Raw", LAPPDDataBeamgateUL);
-    m_data->CStore.Get("LAPPDTimestamp_Raw", LAPPDDataTimeStampUL);
-    m_data->CStore.Get("LAPPDBGIntCombined", LAPPDDataBeamgatePart1);
-    m_data->CStore.Get("LAPPDBGFloat", LAPPDDataBeamgatePart2);
-    m_data->CStore.Get("LAPPDTSIntCombined", LAPPDDataTimestampPart1);
-    m_data->CStore.Get("LAPPDTSFloat", LAPPDDataTimestampPart2);
+
+    // Retrieve ACDC 0 reconstructed objects
+    m_data->CStore.Get("LAPPDBeamgate0_Raw", LAPPDDataBeamgate0_UL);
+    m_data->CStore.Get("LAPPDTimestamp0_Raw", LAPPDDataTimeStamp0_UL);
+    m_data->CStore.Get("LAPPDBG0_IntCombined", LAPPDDataBeamgate0_Part1);
+    m_data->CStore.Get("LAPPDBG0_Float", LAPPDDataBeamgate0_Part2);
+    m_data->CStore.Get("LAPPDTS0_IntCombined", LAPPDDataTimestamp0_Part1);
+    m_data->CStore.Get("LAPPDTS0_Float", LAPPDDataTimestamp0_Part2);
+
+    // Retrieve ACDC 1 reconstructed objects
+    m_data->CStore.Get("LAPPDBeamgate1_Raw", LAPPDDataBeamgate1_UL);
+    m_data->CStore.Get("LAPPDTimestamp1_Raw", LAPPDDataTimeStamp1_UL);
+    m_data->CStore.Get("LAPPDBG1_IntCombined", LAPPDDataBeamgate1_Part1);
+    m_data->CStore.Get("LAPPDBG1_Float", LAPPDDataBeamgate1_Part2);
+    m_data->CStore.Get("LAPPDTS1_IntCombined", LAPPDDataTimestamp1_Part1);
+    m_data->CStore.Get("LAPPDTS1_Float", LAPPDDataTimestamp1_Part2);
+
     m_data->CStore.Get("LAPPD_ID", LAPPD_ID);
     fTimeStamp->Fill();
   }
@@ -773,13 +817,31 @@ bool LAPPDTreeMaker::FillLAPPDDataTimeStamp()
     for (int i = 0; i < LAPPD_IDs.size(); i++)
     {
       LAPPD_ID = LAPPD_IDs.at(i);
-      LAPPDDataBeamgateUL = LAPPDMapBeamgateRaw.at(i);
-      LAPPDDataTimeStampUL = LAPPDMapTimeStampRaw.at(i);
+      LAPPDDataBeamgate0_UL = LAPPDMapBeamgateRaw.at(i);
+      LAPPDDataTimeStamp0_UL = LAPPDMapTimeStampRaw.at(i);
       fTimeStamp->Fill();
     }
   }
-  if (treeMakerVerbosity > 0)
-    cout << "LAPPDDataTimeStampUL: " << LAPPDDataTimeStampUL << ", LAPPDDataBeamgateUL: " << LAPPDDataBeamgateUL << ", LAPPDDataTimestampPart1: " << LAPPDDataTimestampPart1 << ", LAPPDDataBeamgatePart1: " << LAPPDDataBeamgatePart1 << ", LAPPDDataTimestampPart2: " << LAPPDDataTimestampPart2 << ", LAPPDDataBeamgatePart2: " << LAPPDDataBeamgatePart2 << endl;
+  if (treeMakerVerbosity > 0) {
+    std::cout << "LAPPDTreeMaker::FillLAPPDDataTimeStamp, after fill:"
+          << "\n  ACDC 0:"
+          << "\n    Timestamp UL   = " << LAPPDDataTimeStamp0_UL
+          << "\n    Beamgate UL    = " << LAPPDDataBeamgate0_UL
+          << "\n    Timestamp Part1 = " << LAPPDDataTimestamp0_Part1
+          << "\n    Beamgate Part1  = " << LAPPDDataBeamgate0_Part1
+          << "\n    Timestamp Part2 = " << LAPPDDataTimestamp0_Part2
+          << "\n    Beamgate Part2  = " << LAPPDDataBeamgate0_Part2
+          << "\n  ACDC 1:"
+          << "\n    Timestamp UL   = " << LAPPDDataTimeStamp1_UL
+          << "\n    Beamgate UL    = " << LAPPDDataBeamgate1_UL
+          << "\n    Timestamp Part1 = " << LAPPDDataTimestamp1_Part1
+          << "\n    Beamgate Part1  = " << LAPPDDataBeamgate1_Part1
+          << "\n    Timestamp Part2 = " << LAPPDDataTimestamp1_Part2
+          << "\n    Beamgate Part2  = " << LAPPDDataBeamgate1_Part2
+          << "\n  LAPPD ID = " << LAPPD_ID
+          << std::endl;
+  }
+  
   return true;
 }
 
