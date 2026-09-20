@@ -238,10 +238,16 @@ void PrintDQ::FindCounts() {
        
             // Check PPS quality for all LAPPDs in this event
             bool skip = false;
-            for (size_t k = 0; k < fLAPPD_TSPPSMissing.size(); k++) {
-                if (fLAPPD_TSPPSMissing[k] != 0) {
+            for (size_t k = 0; k < fLAPPD_TSPPSMissing_0.size(); k++) {
+
+                bool missing_0 = (fLAPPD_TSPPSMissing_0[k] != 0);
+                bool missing_1 = (fLAPPD_TSPPSMissing_1[k] != 0);
+
+                // OR logic: if both boards have missing ticks, skip the event.
+                // This is an event level check; its true essense is in per-LAPPD, but for quick DQ check, this is fine.
+                if (missing_0 && missing_1) {
                     skip = true;
-                    break;
+                    break; 
                 }
             }
             if (!skip) {
@@ -401,9 +407,14 @@ bool PrintDQ::LoadStores()
         Log("PrintDQ: No LAPPDDataMap found! Did you run the LAPPDLoadStore tool?", v_debug, verbosity);
     }
 
-    bool get_ts_pps_missing = m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSMissing", fLAPPDTS_PPSMissing);
-    if (!get_ts_pps_missing) {
-        Log("PrintDQ: No TS PPS Missing vector found! Did you run the LAPPDLoadStore tool?", v_debug, verbosity);
+    bool get_ts_pps_missing_0 = m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSMissing_0", fLAPPDTS_PPSMissing_0);
+    if (!get_ts_pps_missing_0) {
+        Log("PrintDQ: No TS PPS Missing_0 vector found! Did you run the LAPPDLoadStore tool?", v_debug, verbosity);
+    }
+
+    bool get_ts_pps_missing_1 = m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSMissing_1", fLAPPDTS_PPSMissing_1);
+    if (!get_ts_pps_missing_1) {
+        Log("PrintDQ: No TS PPS Missing_1 vector found! Did you run the LAPPDLoadStore tool?", v_debug, verbosity);
     }
 
     return true;
@@ -434,8 +445,10 @@ void PrintDQ::ResetVariables() {
 
     // LAPPD related metric
     fLAPPDDataMap.clear();
-    fLAPPD_TSPPSMissing.clear(); 	// This vector is to store output per LAPPD
-    fLAPPDTS_PPSMissing.clear();	// This vector is to load from ANNIEEvent store
+    fLAPPD_TSPPSMissing_0.clear(); 	// This vector is to store output per LAPPD
+    fLAPPDTS_PPSMissing_0.clear();	// This vector is to load from ANNIEEvent store
+    fLAPPD_TSPPSMissing_1.clear();
+    fLAPPDTS_PPSMissing_1.clear();
 }
 
 
@@ -504,7 +517,8 @@ bool PrintDQ::GrabVariables() {
     for (std::map<uint64_t, PsecData>::iterator it = fLAPPDDataMap.begin(); it != fLAPPDDataMap.end(); ++it)
     {
         uint64_t key = it->first; 
-        fLAPPD_TSPPSMissing.push_back(fLAPPDTS_PPSMissing[key]);
+        fLAPPD_TSPPSMissing_0.push_back(fLAPPDTS_PPSMissing_0[key]);
+        fLAPPD_TSPPSMissing_1.push_back(fLAPPDTS_PPSMissing_1[key]);
     }
 
     return true;
