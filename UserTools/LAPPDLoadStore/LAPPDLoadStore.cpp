@@ -261,6 +261,41 @@ bool LAPPDLoadStore::Execute()
                               << ", gotTS_PPSDiff = " << gotTS_PPSDiff_1 << ", gotTS_PPSMissing = " << gotTS_PPSMissing_1 << std::endl;\
                 }
             }
+
+            // --- BACKWARD COMPATIBILITY BLOCK ---
+            // If the _0 identifiers were not found, this is older processed data.
+            // Fetch the legacy variables (no suffixes) and map them to ACDC 0.
+            if (!gotBeamgates_ns_0) 
+            {
+                if (LAPPDLoadStoreVerbosity > 0)
+                    std::cout << "LAPPDLoadStore: Legacy data detected. Mapping old variables to ACDC 0." << std::endl;
+                
+                bool gotLegacy = m_data->Stores["ANNIEEvent"]->Get("LAPPDBeamgate_ns", LAPPDBeamgate_ns_0);
+                
+                if (gotLegacy) 
+                {
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTimeStamps_ns", LAPPDTimeStamps_ns_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTimeStampsRaw", LAPPDTimeStampsRaw_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBeamgatesRaw", LAPPDBeamgatesRaw_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDOffsets", LAPPDOffsets_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTSCorrection", LAPPDTSCorrection_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBGCorrection", LAPPDBGCorrection_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDOSInMinusPS", LAPPDOSInMinusPS_0);
+                }
+
+                if (LoadBuiltPPSInfo && gotLegacy) 
+                {
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBG_PPSBefore", LAPPDBG_PPSBefore_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBG_PPSAfter", LAPPDBG_PPSAfter_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBG_PPSDiff", LAPPDBG_PPSDiff_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDBG_PPSMissing", LAPPDBG_PPSMissing_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSBefore", LAPPDTS_PPSBefore_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSAfter", LAPPDTS_PPSAfter_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSDiff", LAPPDTS_PPSDiff_0);
+                    m_data->Stores["ANNIEEvent"]->Get("LAPPDTS_PPSMissing", LAPPDTS_PPSMissing_0);
+                }
+            }
+            // --- END BACKWARD COMPATIBILITY BLOCK ---   
         }
         else
         {
@@ -499,6 +534,8 @@ bool LAPPDLoadStore::Execute()
                     }
                 }
 
+                // --- ACDC 0 Loading ---
+                // (Legacy data was mapped to _0, so these maps are guaranteed to have data)
                 LAPPDLoadedTimeStampsRaw_0.push_back(LAPPDTimeStampsRaw_0.at(time));
                 LAPPDLoadedBeamgatesRaw_0.push_back(LAPPDBeamgatesRaw_0.at(time));
                 LAPPDLoadedOffsets_0.push_back(LAPPDOffsets_0.at(time));
@@ -506,12 +543,27 @@ bool LAPPDLoadStore::Execute()
                 LAPPDLoadedBGCorrections_0.push_back(LAPPDBGCorrection_0.at(time));
                 LAPPDLoadedOSInMinusPS_0.push_back(LAPPDOSInMinusPS_0.at(time));
 
-                LAPPDLoadedTimeStampsRaw_1.push_back(LAPPDTimeStampsRaw_1.at(time));
-                LAPPDLoadedBeamgatesRaw_1.push_back(LAPPDBeamgatesRaw_1.at(time));
-                LAPPDLoadedOffsets_1.push_back(LAPPDOffsets_1.at(time));
-                LAPPDLoadedTSCorrections_1.push_back(LAPPDTSCorrection_1.at(time));
-                LAPPDLoadedBGCorrections_1.push_back(LAPPDBGCorrection_1.at(time));
-                LAPPDLoadedOSInMinusPS_1.push_back(LAPPDOSInMinusPS_1.at(time));
+                // --- ACDC 1 Loading ---
+                // Check whether ACDC 1 has data; if not, this is legacy data with no ACDC 1 identifier
+                if (LAPPDTimeStampsRaw_1.count(time) > 0) 
+                {
+                    LAPPDLoadedTimeStampsRaw_1.push_back(LAPPDTimeStampsRaw_1.at(time));
+                    LAPPDLoadedBeamgatesRaw_1.push_back(LAPPDBeamgatesRaw_1.at(time));
+                    LAPPDLoadedOffsets_1.push_back(LAPPDOffsets_1.at(time));
+                    LAPPDLoadedTSCorrections_1.push_back(LAPPDTSCorrection_1.at(time));
+                    LAPPDLoadedBGCorrections_1.push_back(LAPPDBGCorrection_1.at(time));
+                    LAPPDLoadedOSInMinusPS_1.push_back(LAPPDOSInMinusPS_1.at(time));
+                } 
+                else 
+                {
+                    // Legacy data fallback: safely fill ACDC 1 with dummy zeros
+                    LAPPDLoadedTimeStampsRaw_1.push_back(-1);
+                    LAPPDLoadedBeamgatesRaw_1.push_back(-1);
+                    LAPPDLoadedOffsets_1.push_back(-1);
+                    LAPPDLoadedTSCorrections_1.push_back(-1);
+                    LAPPDLoadedBGCorrections_1.push_back(-1);
+                    LAPPDLoadedOSInMinusPS_1.push_back(-1);
+                }
 
                 if (LAPPDLoadStoreVerbosity > 2)
                     cout << "parsing finished for LAPPD_ID " << LAPPD_ID << " at time " << time << endl;
@@ -527,14 +579,28 @@ bool LAPPDLoadStore::Execute()
                     LAPPDLoadedTS_PPSDiff_0.push_back(LAPPDTS_PPSDiff_0.at(time));
                     LAPPDLoadedTS_PPSMissing_0.push_back(LAPPDTS_PPSMissing_0.at(time));
 
-                    LAPPDLoadedBG_PPSBefore_1.push_back(LAPPDBG_PPSBefore_1.at(time));
-                    LAPPDLoadedBG_PPSAfter_1.push_back(LAPPDBG_PPSAfter_1.at(time));
-                    LAPPDLoadedBG_PPSDiff_1.push_back(LAPPDBG_PPSDiff_1.at(time));
-                    LAPPDLoadedBG_PPSMissing_1.push_back(LAPPDBG_PPSMissing_1.at(time));
-                    LAPPDLoadedTS_PPSBefore_1.push_back(LAPPDTS_PPSBefore_1.at(time));
-                    LAPPDLoadedTS_PPSAfter_1.push_back(LAPPDTS_PPSAfter_1.at(time));
-                    LAPPDLoadedTS_PPSDiff_1.push_back(LAPPDTS_PPSDiff_1.at(time));
-                    LAPPDLoadedTS_PPSMissing_1.push_back(LAPPDTS_PPSMissing_1.at(time));
+                    if (LAPPDBG_PPSBefore_1.count(time) > 0) 
+                    {
+                        LAPPDLoadedBG_PPSBefore_1.push_back(LAPPDBG_PPSBefore_1.at(time));
+                        LAPPDLoadedBG_PPSAfter_1.push_back(LAPPDBG_PPSAfter_1.at(time));
+                        LAPPDLoadedBG_PPSDiff_1.push_back(LAPPDBG_PPSDiff_1.at(time));
+                        LAPPDLoadedBG_PPSMissing_1.push_back(LAPPDBG_PPSMissing_1.at(time));
+                        LAPPDLoadedTS_PPSBefore_1.push_back(LAPPDTS_PPSBefore_1.at(time));
+                        LAPPDLoadedTS_PPSAfter_1.push_back(LAPPDTS_PPSAfter_1.at(time));
+                        LAPPDLoadedTS_PPSDiff_1.push_back(LAPPDTS_PPSDiff_1.at(time));
+                        LAPPDLoadedTS_PPSMissing_1.push_back(LAPPDTS_PPSMissing_1.at(time));
+                    } 
+                    else 
+                    {
+                        LAPPDLoadedBG_PPSBefore_1.push_back(-1);
+                        LAPPDLoadedBG_PPSAfter_1.push_back(-1);
+                        LAPPDLoadedBG_PPSDiff_1.push_back(-1);
+                        LAPPDLoadedBG_PPSMissing_1.push_back(-1);
+                        LAPPDLoadedTS_PPSBefore_1.push_back(-1);
+                        LAPPDLoadedTS_PPSAfter_1.push_back(-1);
+                        LAPPDLoadedTS_PPSDiff_1.push_back(-1);
+                        LAPPDLoadedTS_PPSMissing_1.push_back(-1);
+                    }
 
                     // --- Board 0 Check ---
                     if (LAPPDTS_PPSMissing_0.at(time) != LAPPDBG_PPSMissing_0.at(time) && 
@@ -549,15 +615,17 @@ bool LAPPDLoadStore::Execute()
                     }
 
                     // --- Board 1 Check ---
-                    if (LAPPDTS_PPSMissing_1.at(time) != LAPPDBG_PPSMissing_1.at(time) && 
-                        ((LAPPDTS_PPSMissing_1.at(time) > -100 && LAPPDTS_PPSMissing_1.at(time) < 100) || 
-                         (LAPPDBG_PPSMissing_1.at(time) > -100 && LAPPDBG_PPSMissing_1.at(time) < 100)))
-                    {
-                        std::cout << "LAPPDLoadStore: [Board 1] PPS missing mismatch for LAPPD_ID " << LAPPD_ID 
+                    if (LAPPDTS_PPSMissing_1.count(time) > 0) {
+                        if (LAPPDTS_PPSMissing_1.at(time) != LAPPDBG_PPSMissing_1.at(time) && 
+                            ((LAPPDTS_PPSMissing_1.at(time) > -100 && LAPPDTS_PPSMissing_1.at(time) < 100) || 
+                             (LAPPDBG_PPSMissing_1.at(time) > -100 && LAPPDBG_PPSMissing_1.at(time) < 100)))
+                        {
+                            std::cout << "LAPPDLoadStore: [Board 1] PPS missing mismatch for LAPPD_ID " << LAPPD_ID 
                               << " at time " << time << ", BG: " << LAPPDBG_PPSMissing_1.at(time) 
                               << ", TS: " << LAPPDTS_PPSMissing_1.at(time) << std::endl;
-                        std::cout << "LAPPDLoadStore: [Board 1] BG_PPSDiff: " << LAPPDBG_PPSDiff_1.at(time) 
+                            std::cout << "LAPPDLoadStore: [Board 1] BG_PPSDiff: " << LAPPDBG_PPSDiff_1.at(time) 
                               << ", TS_PPSDiff: " << LAPPDTS_PPSDiff_1.at(time) << std::endl;
+                        }
                     }
                 }
             }
