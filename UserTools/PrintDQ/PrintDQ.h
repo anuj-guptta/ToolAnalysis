@@ -48,9 +48,11 @@ class PrintDQ: public Tool {
         std::vector<int> fNumClusterTracks;                                    ///< MRD Tracks corresponding to MRD clusters (NumClusterTracks)
 
         std::map<uint64_t, PsecData> fLAPPDDataMap;       
-        std::map<uint64_t, int> fLAPPDTS_PPSMissing;
-        std::vector<int> fLAPPD_TSPPSMissing;
- 
+        std::map<uint64_t, int> fLAPPDTS_PPSMissing_0;
+        std::vector<int> fLAPPD_TSPPSMissing_0;
+        std::map<uint64_t, int> fLAPPDTS_PPSMissing_1;
+        std::vector<int> fLAPPD_TSPPSMissing_1;
+          
         int fRunNumber;                                                        ///< run number (tool assumes you're running over 1 run at a time)
         int fExtended;                                                         ///< extended window trigger (0 = none, 1 = charge-based, 2 = forced)
         ULong64_t fEventTimeTank;                                              ///< ADC waveform timestamp
