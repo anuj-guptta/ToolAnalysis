@@ -96,6 +96,7 @@ bool LAPPDLoadStore::Initialise(std::string configfile, DataModel &data)
     
     if (loadOffsets)
         LoadOffsetsAndCorrections();
+    
     if (LAPPDLoadStoreVerbosity > 5)
         debugLoadStore.open("debugLoadStore.txt");
 
@@ -1602,6 +1603,7 @@ void LAPPDLoadStore::SaveOffsets()
     {
         LAPPDEventIndex_ID.resize(LoadingOffsetID + 1);
     }
+    
     int GetOffsetIndex_byID = LAPPDEventIndex_ID[LoadingOffsetID] - 1;
 
     if(LAPPDLoadStoreVerbosity > 0) {
