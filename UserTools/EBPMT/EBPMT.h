@@ -15,6 +15,8 @@
  * $Date: 2024/04 $
  * Contact: yuef@iaistate.edu
  *
+ * Updated by: Anuj Gupta (2026.10.10)
+ *
  */
 
 class EBPMT : public Tool
@@ -36,20 +38,19 @@ private:
     int currentRunCode;
 
     std::map<uint64_t, std::map<unsigned long, std::vector<Hit>> *> *FinishedHits; // Key: {MTCTime}, value: map of  Hit distributions
-    std::map<uint64_t, vector<uint16_t>> *FinishedRWMWaveforms;                    // Key: {MTCTime}, value: RWM waveform
-    std::map<uint64_t, vector<uint16_t>> *FinishedBRFWaveforms;                    // Key: {MTCTime}, value: BRF waveform
-
     std::map<uint64_t, int> AlmostCompleteWaveforms;
 
     std::map<uint64_t, std::map<unsigned long, std::vector<Hit>> *> *InProgressHits; // Key: {MTCTime}, value: map of  Hit distributions
     std::map<uint64_t, std::vector<unsigned long>> *InProgressChkey;                 // Key: {MTCTime}, value: vector of in progress chankeys
 
     // only used for VME offset correction
+    std::map<uint64_t, std::map<std::vector<int>, std::vector<uint16_t>>>* FinishedTankEvents = nullptr;     // Key: {MTCTime}, value: map of raw, uncalibrated waveforms
     std::map<uint64_t, std::map<unsigned long, std::vector<Hit>> *> *InProgressHitsAux;                        // Key: {MTCTime}, value: map of  Hit distributions
     std::map<uint64_t, std::map<unsigned long, std::vector<std::vector<ADCPulse>>>> *InProgressRecoADCHits;    // Key: {MTCTime}, value: map of found pulses
     std::map<uint64_t, std::map<unsigned long, std::vector<std::vector<ADCPulse>>>> *InProgressRecoADCHitsAux; // Key: {MTCTime}, value: map of found pulses
     std::map<uint64_t, std::vector<uint16_t>> *RWMRawWaveforms;                                                // Key: MTCTime, Value: RWM waveform
     std::map<uint64_t, std::vector<uint16_t>> *BRFRawWaveforms;                                                // Key: MTCTime, Value: BRF waveform
+    std::map<uint64_t, std::vector<uint16_t>> *BESRawWaveforms;                                                // Key: MTCTime, Value: BES waveform
 
     std::map<int, vector<uint64_t>> PairedCTCTimeStamps;
     std::map<int, vector<int>> PairedPMT_TriggerIndex;
@@ -73,6 +74,7 @@ private:
 
     bool saveRWMWaveforms;
     bool saveBRFWaveforms;
+    bool saveBESWaveforms;
 };
 
 #endif

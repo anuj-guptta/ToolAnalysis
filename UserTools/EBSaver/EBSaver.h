@@ -24,6 +24,8 @@
  * $Date: 2024/04 $
  * Contact: yuef@iaistate.edu
  *
+ * Updated by: Anuj Gupta (2026.10.11)
+ *
  */
 
 class EBSaver : public Tool
@@ -77,6 +79,7 @@ private:
 
     bool saveRawRWMWaveform;
     bool saveRawBRFWaveform;
+    bool saveRawBESWaveform;
 
     string savePath;
     string saveName;
@@ -131,6 +134,8 @@ private:
     int PPSMain;
 
     // PMT related data object
+    std::map<uint64_t, std::map<std::vector<int>, std::vector<uint16_t>>>* FinishedTankEvents = nullptr;     // Key: {MTCTime}, value: map of raw, uncalibrated waveforms
+
     std::map<uint64_t, std::map<unsigned long, std::vector<Hit>> *> *InProgressHits;                           // Key: {MTCTime}, value: map of  Hit distributions
     std::map<uint64_t, std::vector<unsigned long>> *InProgressChkey;                                           // Key: {MTCTime}, value: vector of in progress chankeys
     std::map<uint64_t, std::map<unsigned long, std::vector<std::vector<ADCPulse>>>> *InProgressRecoADCHits;    // Key: {MTCTime}, value: map of found pulses
@@ -140,6 +145,7 @@ private:
 
     std::map<uint64_t, std::vector<uint16_t>> *RWMRawWaveforms; // Key: MTCTime, Value: RWM waveform
     std::map<uint64_t, std::vector<uint16_t>> *BRFRawWaveforms; // Key: MTCTime, Value: BRF waveform
+    std::map<uint64_t, std::vector<uint16_t>> *BESRawWaveforms; // Key: MTCTime, Value: BES waveform
 
     std::map<int, vector<uint64_t>> PairedPMTTriggerTimestamp;
     std::map<int, vector<int>> PairedPMT_TriggerIndex;
@@ -159,26 +165,42 @@ private:
 
     // LAPPD related data object
     vector<int> Buffer_IndexOfData;            // index of unpaired data
-    vector<uint64_t> Buffer_LAPPDTimestamp_ns; // used to match
-
-    vector<PsecData> Buffer_LAPPDData;
-    vector<uint64_t> Buffer_LAPPDBeamgate_ns;
-    vector<uint64_t> Buffer_LAPPDOffset;
-    vector<unsigned long> Buffer_LAPPDBeamgate_Raw;
-    vector<unsigned long> Buffer_LAPPDTimestamp_Raw;
-    vector<int> Buffer_LAPPDBGCorrection;
-    vector<int> Buffer_LAPPDTSCorrection;
-    vector<int> Buffer_LAPPDOffset_minus_ps;
-    vector<uint64_t> Buffer_LAPPDBG_PPSBefore;
-    vector<uint64_t> Buffer_LAPPDBG_PPSAfter;
-    vector<uint64_t> Buffer_LAPPDBG_PPSDiff;
-    vector<int> Buffer_LAPPDBG_PPSMissing;
-    vector<uint64_t> Buffer_LAPPDTS_PPSBefore;
-    vector<uint64_t> Buffer_LAPPDTS_PPSAfter;
-    vector<uint64_t> Buffer_LAPPDTS_PPSDiff;
-    vector<int> Buffer_LAPPDTS_PPSMissing;
-
+    vector<PsecData> Buffer_LAPPDData;  
     vector<int> Buffer_LAPPDRunCode;
+
+    vector<uint64_t> Buffer_LAPPDTimestamp_ns_0;
+    vector<uint64_t> Buffer_LAPPDBeamgate_ns_0;
+    vector<uint64_t> Buffer_LAPPDOffset_0;
+    vector<unsigned long> Buffer_LAPPDBeamgate_Raw_0;
+    vector<unsigned long> Buffer_LAPPDTimestamp_Raw_0;
+    vector<int> Buffer_LAPPDBGCorrection_0;
+    vector<int> Buffer_LAPPDTSCorrection_0;
+    vector<int> Buffer_LAPPDOffset_minus_ps_0;
+    vector<uint64_t> Buffer_LAPPDBG_PPSBefore_0;
+    vector<uint64_t> Buffer_LAPPDBG_PPSAfter_0;
+    vector<uint64_t> Buffer_LAPPDBG_PPSDiff_0;
+    vector<int> Buffer_LAPPDBG_PPSMissing_0;
+    vector<uint64_t> Buffer_LAPPDTS_PPSBefore_0;
+    vector<uint64_t> Buffer_LAPPDTS_PPSAfter_0;
+    vector<uint64_t> Buffer_LAPPDTS_PPSDiff_0;
+    vector<int> Buffer_LAPPDTS_PPSMissing_0;
+
+    vector<uint64_t> Buffer_LAPPDTimestamp_ns_1;
+    vector<uint64_t> Buffer_LAPPDBeamgate_ns_1;
+    vector<uint64_t> Buffer_LAPPDOffset_1;
+    vector<unsigned long> Buffer_LAPPDBeamgate_Raw_1;
+    vector<unsigned long> Buffer_LAPPDTimestamp_Raw_1;
+    vector<int> Buffer_LAPPDBGCorrection_1;
+    vector<int> Buffer_LAPPDTSCorrection_1;
+    vector<int> Buffer_LAPPDOffset_minus_ps_1;
+    vector<uint64_t> Buffer_LAPPDBG_PPSBefore_1;
+    vector<uint64_t> Buffer_LAPPDBG_PPSAfter_1;
+    vector<uint64_t> Buffer_LAPPDBG_PPSDiff_1;
+    vector<int> Buffer_LAPPDBG_PPSMissing_1;
+    vector<uint64_t> Buffer_LAPPDTS_PPSBefore_1;
+    vector<uint64_t> Buffer_LAPPDTS_PPSAfter_1;
+    vector<uint64_t> Buffer_LAPPDTS_PPSDiff_1;
+    vector<int> Buffer_LAPPDTS_PPSMissing_1;
 
     std::map<int, vector<uint64_t>> PairedLAPPDTriggerTimestamp;
     std::map<int, vector<int>> PairedLAPPD_TriggerIndex;
