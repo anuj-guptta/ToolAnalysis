@@ -536,7 +536,6 @@ bool PrintDQ::GrabVariables() {
         Log("PrintDQ: Finding MRD Tracks", v_debug, verbosity);
         for (int tracki = 0; tracki < fnumtracksinev; tracki++) {
             
-            NumClusterTracks += 1;
             BoostStore *thisTrackAsBoostStore = &(ftheMrdTracks->at(tracki));
             int TrackEventID = -1;
             thisTrackAsBoostStore->Get("MrdSubEventID", TrackEventID);
