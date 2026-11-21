@@ -196,7 +196,8 @@ private:
     double fBRFFirstPeak;        // in ns, highest sample in the first 10 samples
     double fBRFAveragePeak;      // in ns, average peak position in 10-sample blocks
     double fBRFFirstPeakFit;     // in ps, 50% point on the first full rising edge (interpolated)
-
+    double fBRFPeriodFit;        // in ps, BRF period from the 1st and 2nd rising edges, corrected for skipped cycles
+    
     double fBESstartTime;        // in ps, 50% point on the negative pulse's leading edge
     double fBESendTime;          // in ps, 50% point on the positive pulse's leading edge
     double fBESwidth;            // in ps, BESendTime - BESstartTime
